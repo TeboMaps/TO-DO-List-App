@@ -65,7 +65,7 @@ button{
     color:#F2EBE2;
     font-size:16px ;
     cursor: pointer;
-    border-radius: 40px;
+    border-radius: 60px;
 }
 
 h3{
@@ -76,7 +76,7 @@ h3{
 
 }
 
-ul li{
+#list li{
     list-style: none;
     font-size: 17px;
     padding: 12px 8px 12px 50px;
@@ -87,30 +87,30 @@ ul li{
 
 }
 
-ul li::before{
+#list li::before{
     content: '';
     position: absolute;
     height: 28px;
     width: 28px;
     border-radius: 50%;
-    background-image: url(images/unchecked.png);
+    background-image: url("/images/unchecked.png");
     background-size: cover;
     background-position: center;
     top:12px;
     left:8px;
 }
 
-ul li.checked{
+#list li.checked{
     color: #555;
     text-decoration: line-through;
 }
 
-ul li.checked::before{
-    background-image: url(images/checked.jpg);
+#list li.checked::before{
+    background-image: url("/images/checked.jpg");
 
 }
 
-ul li span{
+#list li span{
     position: absolute;
     right:0;
     top: 5px;
@@ -123,7 +123,7 @@ ul li span{
     border-radius: 50%;
 }
 
-ul li span:hover{
+#list li span:hover{
     background: #edeef0 ;
 }
 

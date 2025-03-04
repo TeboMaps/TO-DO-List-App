@@ -57,6 +57,31 @@
             </form>
         </div>
     </div>
+
+    <script>
+        let signupBtn = document.getElementById("SignupBtn");
+        let signinBtn = document.getElementById("SigninBtn");
+        let namefield = document.getElementById("namefield");
+        let title = document.getElementById("title");
+
+        signinBtn.onclick = function clicksignIn(){
+           namefield.style.maxHeight="0";
+           title.innerHTML="Sign In";
+           signupBtn.classList.add("disable");
+           signinBtn.classList.remove("disable");
+           
+        }
+
+        signupBtn.onclick = function clickSignUp(){
+           namefield.style.maxHeight="60px";
+           title.innerHTML="Sign Up";
+           signupBtn.classList.remove("disable");
+           signinBtn.classList.add("disable");
+        }
+
+       
+    </script>
     
+     <script src="/script.js"></script>
 </body>
 </html>
