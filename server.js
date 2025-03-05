@@ -1,10 +1,10 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 4000;
+const PORT = 3000;
 
 // MongoDB connection string
 const MONGO_URL = 'mongodb+srv://tebogomaphatsoe:Kagoentle1234@cluster0.hwqnh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
@@ -44,6 +44,34 @@ app.get('/api/tasks', async (req, res) => {
         res.status(200).json(tasks);
     } catch (error) {
         res.status(500).json({ error: 'Failed to retrieve tasks' });
+    }
+});
+
+// Update a task
+app.put('/api/tasks/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { text } = req.body;
+        const collection = db.collection(COLLECTION_NAME);
+        const result = await collection.updateOne(
+            { _id: ObjectId(id) },
+            { $set: { text } }
+        );
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to update task' });
+    }
+});
+
+// Delete a task
+app.delete('/api/tasks/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
+        const collection = db.collection(COLLECTION_NAME);
+        const result = await collection.deleteOne({ _id: ObjectId(id) });
+        res.status(200).json(result);
+    } catch (error) {
+        res.status(500).json({ error: 'Failed to delete task' });
     }
 });
 
