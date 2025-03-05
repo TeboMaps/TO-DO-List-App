@@ -41,19 +41,15 @@ async function addNewData(event) {
 // Function to add a task to the UI
 function addTaskToUI(task) {
     const listItem = document.createElement('li');
-    listItem.setAttribute('data-id', task._id); // Add task ID to the list item
-
-    // Create a span for the task text
-    const taskText = document.createElement('span');
-    taskText.textContent = task.text;
-    listItem.appendChild(taskText);
+    listItem.textContent = task.text;
+    listItem.dataset.id = task._id; // Store the task ID in the list item
 
     // Add an edit button to the list item
     const editButton = document.createElement('button');
     editButton.textContent = '✏️';
     editButton.classList.add('edit-btn');
     editButton.onclick = function () {
-        editTask(task._id, taskText); // Call the editTask function when the edit button is clicked
+        editTask(task._id, listItem); // Call the editTask function when the edit button is clicked
     };
 
     // Add a delete button to the list item
@@ -69,31 +65,33 @@ function addTaskToUI(task) {
     listItem.appendChild(deleteButton);
 
     // Add the new task to the list
-    const listContainer = document.getElementById('list containers');
+    const listContainer = document.getElementById('list-containers');
     listContainer.appendChild(listItem);
 }
 
 // Function to edit a task
-async function editTask(taskId, taskTextElement) {
-    const newText = prompt('Edit your task:', taskTextElement.textContent);
+async function editTask(taskId, listItem) {
+    const newText = prompt('Edit your task:', listItem.textContent);
 
-    if (newText !== null && newText.trim() !== '') {
-        try {
-            const response = await fetch(`${API_URL}/${taskId}`, {
-                method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text: newText.trim() }),
-            });
+    if (newText === null || newText.trim() === '') {
+        return; // Do nothing if the user cancels or enters an empty string
+    }
 
-            if (!response.ok) {
-                throw new Error('Failed to update task');
-            }
+    try {
+        const response = await fetch(`${API_URL}/${taskId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ text: newText.trim() }),
+        });
 
-            // Update the task in the UI
-            taskTextElement.textContent = newText.trim();
-        } catch (error) {
-            console.error('Error:', error);
+        if (!response.ok) {
+            throw new Error('Failed to update task');
         }
+
+        const updatedTask = await response.json();
+        listItem.textContent = updatedTask.text; // Update the task text in the UI
+    } catch (error) {
+        console.error('Error:', error);
     }
 }
 
@@ -108,8 +106,7 @@ async function deleteTask(taskId, listItem) {
             throw new Error('Failed to delete task');
         }
 
-        // Remove the task from the UI
-        listItem.remove();
+        listItem.remove(); // Remove the task from the UI
     } catch (error) {
         console.error('Error:', error);
     }

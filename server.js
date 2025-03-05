@@ -10,7 +10,7 @@ const PORT = 4000;
 const MONGO_URL = 'mongodb+srv://tebogomaphatsoe:Kagoentle1234@cluster0.hwqnh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const DB_NAME = 'todo_app'; // Replace with your actual database name
 const COLLECTION_NAME = 'tasks'; // Replace with your actual collection name
-const COLLECTION_NAME2 = 'User';
+const { createUser, findUserByEmail } = require('./modal'); 
 
 // Middleware
 app.use(cors());
@@ -24,83 +24,125 @@ async function connectToMongoDB() {
     db = client.db(DB_NAME);
     console.log('Connected to MongoDB');
 }
-
-//login
-// Registration endpoint
-app.post('/api/signup', async (req, res) => {
-    const { name, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const user = new User({ name, email, password: hashedPassword });
-
-    try {
-        await user.save();
-        res.status(201).send('User registered successfully');
-    } catch (error) {
-        res.status(400).send('Error registering user: ' + error.message);
+const taskSchema = new mongoose.Schema({
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
+    },
+    password: {
+        type: String,
+        required: true
     }
 });
 
-// Login endpoint
+// Create the Task model
+const Task = mongoose.model('modal', taskSchema);
+
+
+// Sign Up Endpoint
 app.post('/api/User', async (req, res) => {
+    const { name, email, password } = req.body;
+
+    try {
+        // Check if the user already exists
+        const existingUser = await findUserByEmail(email);
+        if (existingUser) {
+            return res.status(400).send('User already exists.');
+        }
+
+        // Create a new user
+        await createUser(name, email, password);
+        res.status(201).send('User created successfully.');
+    } catch (error) {
+        console.error('Error creating user:', error);
+        res.status(500).send('Internal server error.');
+    }
+});
+
+// Sign In Endpoint
+app.post('/api/User/login', async (req, res) => {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
-    if (!user) return res.status(400).send('User not found');
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(400).send('Invalid credentials');
+    try {
+        // Find the user by email
+        const user = await findUserByEmail(email);
+        if (!user) {
+            return res.status(404).send('User not found.');
+        }
 
-    const token = jwt.sign({ id: User._id }, 'your_jwt_secret_key'); // Replace with your JWT secret key
-    res.json({ token });
+        // Compare passwords (plaintext comparison for now, use bcrypt in production)
+        if (user.password === password) {
+            // Generate a token (dummy token for now, use JWT in production)
+            const token = 'dummy-token';
+            res.status(200).json({ token });
+        } else {
+            res.status(401).send('Invalid password.');
+        }
+    } catch (error) {
+        console.error('Error signing in:', error);
+        res.status(500).send('Internal server error.');
+    }
 });
 
 // Save a new task
-app.post('/api/User', async (req, res) => {
+app.post('/api/tasks', async (req, res) => {
+    const { text } = req.body;
+
     try {
-        const { text } = req.body;
-        const collection = db.collection(COLLECTION_NAME2);
-        const result = await collection.insertOne({ text, completed: false });
-        res.status(201).json(result.ops[0]);
+        const newTask = new Task({ text });
+        await newTask.save();
+        res.status(201).json(newTask);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to save task' });
+        console.error('Error saving task:', error);
+        res.status(500).send('Internal server error.');
     }
 });
 
-// Retrieve all tasks
+// Get all tasks
 app.get('/api/tasks', async (req, res) => {
     try {
-        const collection = db.collection(COLLECTION_NAME);
-        const tasks = await collection.find({}).toArray();
+        const tasks = await Task.find();
         res.status(200).json(tasks);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to retrieve tasks' });
+        console.error('Error fetching tasks:', error);
+        res.status(500).send('Internal server error.');
     }
 });
 
-// Update a task
+// Edit a task
 app.put('/api/tasks/:id', async (req, res) => {
+    const { id } = req.params;
+    const { text } = req.body;
+
     try {
-        const { id } = req.params;
-        const { text } = req.body;
-        const collection = db.collection(COLLECTION_NAME);
-        const result = await collection.updateOne(
-            { _id: ObjectId(id) },
-            { $set: { text } }
-        );
-        res.status(200).json(result);
+        const updatedTask = await Task.findByIdAndUpdate(id, { text }, { new: true });
+        if (!updatedTask) {
+            return res.status(404).send('Task not found.');
+        }
+        res.status(200).json(updatedTask);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to update task' });
+        console.error('Error updating task:', error);
+        res.status(500).send('Internal server error.');
     }
 });
 
 // Delete a task
 app.delete('/api/tasks/:id', async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const { id } = req.params;
-        const collection = db.collection(COLLECTION_NAME);
-        const result = await collection.deleteOne({ _id: ObjectId(id) });
-        res.status(200).json(result);
+        const deletedTask = await Task.findByIdAndDelete(id);
+        if (!deletedTask) {
+            return res.status(404).send('Task not found.');
+        }
+        res.status(200).json(deletedTask);
     } catch (error) {
-        res.status(500).json({ error: 'Failed to delete task' });
+        console.error('Error deleting task:', error);
+        res.status(500).send('Internal server error.');
     }
 });
 
