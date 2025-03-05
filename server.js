@@ -1,15 +1,16 @@
 const express = require('express');
-const { MongoClient, ObjectId } = require('mongodb');
+const { MongoClient } = require('mongodb');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
 
 // MongoDB connection string
 const MONGO_URL = 'mongodb+srv://tebogomaphatsoe:Kagoentle1234@cluster0.hwqnh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
 const DB_NAME = 'todo_app'; // Replace with your actual database name
 const COLLECTION_NAME = 'tasks'; // Replace with your actual collection name
+const COLLECTION_NAME2 = 'User';
 
 // Middleware
 app.use(cors());
@@ -24,11 +25,39 @@ async function connectToMongoDB() {
     console.log('Connected to MongoDB');
 }
 
+//login
+// Registration endpoint
+app.post('/api/signup', async (req, res) => {
+    const { name, email, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ name, email, password: hashedPassword });
+
+    try {
+        await user.save();
+        res.status(201).send('User registered successfully');
+    } catch (error) {
+        res.status(400).send('Error registering user: ' + error.message);
+    }
+});
+
+// Login endpoint
+app.post('/api/User', async (req, res) => {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) return res.status(400).send('User not found');
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) return res.status(400).send('Invalid credentials');
+
+    const token = jwt.sign({ id: User._id }, 'your_jwt_secret_key'); // Replace with your JWT secret key
+    res.json({ token });
+});
+
 // Save a new task
-app.post('/api/tasks', async (req, res) => {
+app.post('/api/User', async (req, res) => {
     try {
         const { text } = req.body;
-        const collection = db.collection(COLLECTION_NAME);
+        const collection = db.collection(COLLECTION_NAME2);
         const result = await collection.insertOne({ text, completed: false });
         res.status(201).json(result.ops[0]);
     } catch (error) {

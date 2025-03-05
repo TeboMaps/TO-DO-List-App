@@ -42,14 +42,18 @@ async function addNewData(event) {
 function addTaskToUI(task) {
     const listItem = document.createElement('li');
     listItem.setAttribute('data-id', task._id); // Add task ID to the list item
-    listItem.textContent = task.text;
+
+    // Create a span for the task text
+    const taskText = document.createElement('span');
+    taskText.textContent = task.text;
+    listItem.appendChild(taskText);
 
     // Add an edit button to the list item
     const editButton = document.createElement('button');
     editButton.textContent = '✏️';
     editButton.classList.add('edit-btn');
     editButton.onclick = function () {
-        editTask(task._id, listItem); // Call the editTask function when the edit button is clicked
+        editTask(task._id, taskText); // Call the editTask function when the edit button is clicked
     };
 
     // Add a delete button to the list item
@@ -70,8 +74,8 @@ function addTaskToUI(task) {
 }
 
 // Function to edit a task
-async function editTask(taskId, listItem) {
-    const newText = prompt('Edit your task:', listItem.textContent);
+async function editTask(taskId, taskTextElement) {
+    const newText = prompt('Edit your task:', taskTextElement.textContent);
 
     if (newText !== null && newText.trim() !== '') {
         try {
@@ -86,7 +90,7 @@ async function editTask(taskId, listItem) {
             }
 
             // Update the task in the UI
-            listItem.textContent = newText.trim();
+            taskTextElement.textContent = newText.trim();
         } catch (error) {
             console.error('Error:', error);
         }

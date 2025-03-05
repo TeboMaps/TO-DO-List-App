@@ -118,3 +118,50 @@ form p a {
 .btn-field button:hover{
     background: rgb(151, 100, 100);
 }
+
+/* Media Queries for Responsiveness */
+
+/* For tablets and smaller desktops */
+@media (max-width: 768px) {
+    .form-box {
+        padding: 30px 20px; /* Reduced padding */
+    }
+
+    .form-box h1 {
+        font-size: 22px; /* Adjusted font size */
+        margin-bottom: 30px; /* Adjusted margin */
+    }
+
+    input {
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    .btn-field button {
+        flex-basis: 100%; /* Full width for buttons */
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+    .form-box {
+        padding: 20px 15px; /* Reduced padding */
+    }
+
+    .form-box h1 {
+        font-size: 20px; /* Adjusted font size */
+        margin-bottom: 20px; /* Adjusted margin */
+    }
+
+    input {
+        font-size: 12px; /* Adjusted font size */
+    }
+
+    .btn-field button {
+        height: 35px; /* Adjusted height */
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    .form-box .logo {
+        padding-top: 80px; /* Adjusted padding */
+    }
+}
