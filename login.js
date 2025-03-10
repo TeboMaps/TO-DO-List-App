@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/User';
+
 document.getElementById('signUp').addEventListener('submit', async (event) => {
     event.preventDefault();
     const name = document.getElementById('nameID').value;
@@ -33,8 +33,6 @@ document.getElementById('SigninBtn').addEventListener('click', async (event) => 
     const result = await response.json();
     if (result.token) {
         alert('Login successful');
-        // Save token to localStorage or use it as needed
-        localStorage.setItem('token', result.token);
         window.location.href = '/to-doList.html'; 
     } else {
         alert(result);
