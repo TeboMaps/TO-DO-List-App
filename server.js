@@ -2,6 +2,8 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const path = require('path')
+
 //const bodyParser = require('body-parser');
 
 const app = express();
@@ -18,6 +20,9 @@ app.use(cors());
 //app.use(bodyParser.json());
 app.use(express.json());
 
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use('/views', express.static(path.join(__dirname, 'views')))
 
 // Connect to MongoDB
 mongoose.connect(MONGO_URL, {
@@ -40,6 +45,12 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model('Task', taskSchema);
 
 // API Endpoints
+
+// fetch and serve frontend
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'views', 'index.html'));
+    res.sendFile(path.join(__dirname, 'views', 'to-doList.html'));
+});
 
 // Get all tasks
 app.get('/api/tasks', async (req, res) => {
