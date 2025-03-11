@@ -61,7 +61,8 @@ createUserWithEmailAndPassword(auth, email, password)
 .then((userCredential) => {
  // Signed in 
  const user = userCredential.user;
- window.location.href = "./to-doList.html";
+//  window.location.href = "./to-doList.html";
+window.location.href = 'views/to-doList.html'
  toggle();
 
  // ...
