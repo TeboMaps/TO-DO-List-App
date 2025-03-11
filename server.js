@@ -1,106 +1,45 @@
 const express = require('express');
-const { MongoClient } = require('mongodb');
+const mongoose = require('mongoose');
 const cors = require('cors');
-const bodyParser = require('body-parser');
+
+//const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 4000;
 
 // MongoDB connection string
-const MONGO_URL = 'mongodb+srv://tebogomaphatsoe:Kagoentle1234@cluster0.hwqnh.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0';
+const MONGO_URL = 'mongodb+srv://tebogomaphatsoe:Kagoentle1234@cluster0.hwqnh.mongodb.net/todo_app?retryWrites=true&w=majority';
 const DB_NAME = 'todo_app'; // Replace with your actual database name
 const COLLECTION_NAME = 'tasks'; // Replace with your actual collection name
-const { createUser, findUserByEmail } = require('./modal'); 
+
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
+app.use(express.json());
+
 
 // Connect to MongoDB
-let db;
-async function connectToMongoDB() {
-    const client = new MongoClient(MONGO_URL, { useNewUrlParser: true, useUnifiedTopology: true });
-    await client.connect();
-    db = client.db(DB_NAME);
+mongoose.connect(MONGO_URL, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+})
+.then(() => {
     console.log('Connected to MongoDB');
-}
+})
+.catch((error) => {
+    console.error('Failed to connect to MongoDB:', error);
+});
+
+// Define the Task schema
 const taskSchema = new mongoose.Schema({
-    name: {
-        type: String,
-        required: true
-    },
-    email: {
-        type: String,
-        required: true
-    },
-    password: {
-        type: String,
-        required: true
-    }
+    text: { type: String, required: true },
+    completed: { type: Boolean, default: false },
 });
 
-// Create the Task model
-const Task = mongoose.model('modal', taskSchema);
+const Task = mongoose.model('Task', taskSchema);
 
-
-// Sign Up Endpoint
-app.post('/api/User', async (req, res) => {
-    const { name, email, password } = req.body;
-
-    try {
-        // Check if the user already exists
-        const existingUser = await findUserByEmail(email);
-        if (existingUser) {
-            return res.status(400).send('User already exists.');
-        }
-
-        // Create a new user
-        await createUser(name, email, password);
-        res.status(201).send('User created successfully.');
-    } catch (error) {
-        console.error('Error creating user:', error);
-        res.status(500).send('Internal server error.');
-    }
-});
-
-// Sign In Endpoint
-app.post('/api/User/login', async (req, res) => {
-    const { email, password } = req.body;
-
-    try {
-        // Find the user by email
-        const user = await findUserByEmail(email);
-        if (!user) {
-            return res.status(404).send('User not found.');
-        }
-
-        // Compare passwords (plaintext comparison for now, use bcrypt in production)
-        if (user.password === password) {
-            // Generate a token (dummy token for now, use JWT in production)
-            const token = 'dummy-token';
-            res.status(200).json({ token });
-        } else {
-            res.status(401).send('Invalid password.');
-        }
-    } catch (error) {
-        console.error('Error signing in:', error);
-        res.status(500).send('Internal server error.');
-    }
-});
-
-// Save a new task
-app.post('/api/tasks', async (req, res) => {
-    const { text } = req.body;
-
-    try {
-        const newTask = new Task({ text });
-        await newTask.save();
-        res.status(201).json(newTask);
-    } catch (error) {
-        console.error('Error saving task:', error);
-        res.status(500).send('Internal server error.');
-    }
-});
+// API Endpoints
 
 // Get all tasks
 app.get('/api/tasks', async (req, res) => {
@@ -113,16 +52,40 @@ app.get('/api/tasks', async (req, res) => {
     }
 });
 
-// Edit a task
-app.put('/api/tasks/:id', async (req, res) => {
-    const { id } = req.params;
+// Add a new task
+app.post('/api/tasks', async (req, res) => {
     const { text } = req.body;
 
+    if (!text) {
+        return res.status(400).json({ message: 'Task text is required' });
+    }
+
     try {
-        const updatedTask = await Task.findByIdAndUpdate(id, { text }, { new: true });
+        const newTask = new Task({ text });
+        await newTask.save();
+        res.status(201).json(newTask);
+    } catch (error) {
+        console.error('Error saving task:', error);
+        res.status(500).send('Internal server error.');
+    }
+});
+
+// Update a task (mark as complete or edit text)
+app.put('/api/tasks/:id', async (req, res) => {
+    const { id } = req.params;
+    const { text, completed } = req.body;
+
+    try {
+        const updatedTask = await Task.findByIdAndUpdate(
+            id,
+            { text, completed },
+            { new: true }
+        );
+
         if (!updatedTask) {
             return res.status(404).send('Task not found.');
         }
+
         res.status(200).json(updatedTask);
     } catch (error) {
         console.error('Error updating task:', error);
@@ -136,9 +99,11 @@ app.delete('/api/tasks/:id', async (req, res) => {
 
     try {
         const deletedTask = await Task.findByIdAndDelete(id);
+
         if (!deletedTask) {
             return res.status(404).send('Task not found.');
         }
+
         res.status(200).json(deletedTask);
     } catch (error) {
         console.error('Error deleting task:', error);
@@ -146,8 +111,6 @@ app.delete('/api/tasks/:id', async (req, res) => {
     }
 });
 
-// Start the server
-app.listen(PORT, async () => {
-    await connectToMongoDB();
+app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });

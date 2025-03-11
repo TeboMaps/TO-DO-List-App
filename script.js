@@ -44,29 +44,66 @@ function addTaskToUI(task) {
     listItem.textContent = task.text;
     listItem.dataset.id = task._id; // Store the task ID in the list item
 
-    // Add an edit button to the list item
+    // Add a "mark as complete" button
+    const completeButton = document.createElement('button');
+    completeButton.textContent = task.completed ? '✅' : '⬜';
+    completeButton.classList.add('complete-btn');
+    completeButton.onclick = function () {
+        toggleComplete(task._id, listItem, completeButton);
+    };
+
+    // Add an edit button
     const editButton = document.createElement('button');
     editButton.textContent = '✏️';
     editButton.classList.add('edit-btn');
     editButton.onclick = function () {
-        editTask(task._id, listItem); // Call the editTask function when the edit button is clicked
+        editTask(task._id, listItem);
     };
 
-    // Add a delete button to the list item
+    // Add a delete button
     const deleteButton = document.createElement('button');
     deleteButton.textContent = '❌';
     deleteButton.classList.add('delete-btn');
     deleteButton.onclick = function () {
-        deleteTask(task._id, listItem); // Call the deleteTask function when the delete button is clicked
+        deleteTask(task._id, listItem);
     };
 
     // Append the buttons to the list item
+    listItem.appendChild(completeButton);
     listItem.appendChild(editButton);
     listItem.appendChild(deleteButton);
 
     // Add the new task to the list
     const listContainer = document.getElementById('list-containers');
     listContainer.appendChild(listItem);
+
+    // Style the task if it's completed
+    if (task.completed) {
+        listItem.style.textDecoration = 'line-through';
+    }
+}
+
+// Function to toggle task completion
+async function toggleComplete(taskId, listItem, completeButton) {
+    try {
+        const response = await fetch(`${API_URL}/${taskId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed: !listItem.classList.contains('completed') }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to update task');
+        }
+
+        const updatedTask = await response.json();
+
+        // Update the UI
+        listItem.style.textDecoration = updatedTask.completed ? 'line-through' : 'none';
+        completeButton.textContent = updatedTask.completed ? '✅' : '⬜';
+    } catch (error) {
+        console.error('Error:', error);
+    }
 }
 
 // Function to edit a task

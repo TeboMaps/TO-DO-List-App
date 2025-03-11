@@ -38,7 +38,6 @@ createUserWithEmailAndPassword(auth, email, password)
  // Signed up 
  const user = userCredential.user;
  alert("Creating Account.....")
- window.location.href = "./to-doList.html";
  // ...
 })
 .catch((error) => {
@@ -62,8 +61,9 @@ createUserWithEmailAndPassword(auth, email, password)
 .then((userCredential) => {
  // Signed in 
  const user = userCredential.user;
- toggle();
  window.location.href = "./to-doList.html";
+ toggle();
+
  // ...
 })
 .catch((error) => {
