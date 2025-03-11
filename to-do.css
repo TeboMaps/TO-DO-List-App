@@ -93,7 +93,6 @@ h3{
     height: 28px;
     width: 28px;
     border-radius: 50%;
-    background-image: url("/images/unchecked.png");
     background-size: cover;
     background-position: center;
     top:12px;
@@ -105,10 +104,7 @@ h3{
     text-decoration: line-through;
 }
 
-#list li.checked::before{
-    background-image: url("/images/checked.jpg");
 
-}
 
 #list li span{
     position: absolute;
@@ -132,50 +128,68 @@ i{
 }
 
 
-#list containers {
+/* Task List Styling */
+#list-containers {
     list-style-type: none;
-    padding: 0;
 }
 
-#list containers li {
+#list-containers li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px;
-    border: 1px solid #ccc;
-    margin-bottom: 5px;
-    background-color: #f9f9f9;
-}
-
-.edit-btn, .delete-btn {
-    background: none;
-    border: none;
-    cursor: pointer;
-    font-size: 16px;
-    padding: 5px;
-    border-radius: 50%;
     transition: background-color 0.3s ease;
 }
 
-.edit-btn {
-    color: #007bff; /* Blue color for edit button */
+#list-containers li:hover {
+    background-color: #f1f1f1;
 }
 
-.edit-btn:hover {
-    background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+#list-containers li.completed {
+    text-decoration: line-through;
+    color: #888;
 }
 
+/* Buttons Styling */
+.complete-btn,
+.edit-btn,
 .delete-btn {
     background: none;
     border: none;
     cursor: pointer;
-    color: red;
     font-size: 16px;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.complete-btn {
+    color: #28a745;
+}
+
+.complete-btn:hover {
+    color: #218838;
+}
+
+.edit-btn {
+    color: #ffc107;
+}
+
+.edit-btn:hover {
+    color: #e0a800;
+}
+
+.delete-btn {
+    color: #dc3545;
 }
 
 .delete-btn:hover {
-    color: darkred;
+    color: #c82333;
 }
+
 
 /* Media Queries for Responsiveness */
 

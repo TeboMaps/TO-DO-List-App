@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/api/tasks';
+const API_URL = 'http://localhost:4000/api/tasks';
 
 // Function to add a new task
 async function addNewData(event) {
@@ -86,10 +86,11 @@ function addTaskToUI(task) {
 // Function to toggle task completion
 async function toggleComplete(taskId, listItem, completeButton) {
     try {
+        const isCompleted = listItem.style.textDecoration === 'line-through';
         const response = await fetch(`${API_URL}/${taskId}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ completed: !listItem.classList.contains('completed') }),
+            body: JSON.stringify({ completed: !isCompleted }),
         });
 
         if (!response.ok) {

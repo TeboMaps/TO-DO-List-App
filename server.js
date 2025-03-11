@@ -110,7 +110,6 @@ app.delete('/api/tasks/:id', async (req, res) => {
         res.status(500).send('Internal server error.');
     }
 });
-
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
