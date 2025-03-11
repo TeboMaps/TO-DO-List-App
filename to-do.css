@@ -1,0 +1,260 @@
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins',sans-serif;
+    box-sizing: border-box;
+}
+
+.container{
+    width: 100%;
+    min-height: 100vh;
+    background:url("/images/ai1rzjdd.png");
+    padding: 10px;
+}
+
+
+.todo-app,.img_class{
+width:75%;
+height:75%;
+padding-left: 100px;
+}
+
+.todo-app{
+    width:100%;
+    max-width: 540px;
+    background:#ffffff60;
+    margin: 10px auto 20px;
+    padding:40px 30px 70px;
+    border-radius: 10px;
+
+}
+
+.todo-app h2{
+    color: rgb(94, 68, 68);
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+}
+
+
+.row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #edeef0;
+    border-radius: 30px;
+    padding-left: 20px;
+    margin-bottom: 25px;
+}
+
+input{
+    flex:1;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 10px;
+    font-weight: 14px;
+}
+
+button{
+    border:none;
+    outline:none;
+    padding:16px 50px;
+    background: #FF6E00;
+    color:#F2EBE2;
+    font-size:16px ;
+    cursor: pointer;
+    border-radius: 60px;
+}
+
+h3{
+    color: rgb(94, 68, 68);
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+
+}
+
+#list li{
+    list-style: none;
+    font-size: 17px;
+    padding: 12px 8px 12px 50px;
+    user-select: none;
+    cursor:pointer;
+    position: relative;
+
+
+}
+
+#list li::before{
+    content: '';
+    position: absolute;
+    height: 28px;
+    width: 28px;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    top:12px;
+    left:8px;
+}
+
+#list li.checked{
+    color: #555;
+    text-decoration: line-through;
+}
+
+
+
+#list li span{
+    position: absolute;
+    right:0;
+    top: 5px;
+    width: 40px;
+    height: 40px;
+    font-size: 22px ;
+    color: #555;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+#list li span:hover{
+    background: #edeef0 ;
+}
+
+i{
+    color: #6b666699;
+}
+
+
+/* Task List Styling */
+#list-containers {
+    list-style-type: none;
+}
+
+#list-containers li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: background-color 0.3s ease;
+}
+
+#list-containers li:hover {
+    background-color: #f1f1f1;
+}
+
+#list-containers li.completed {
+    text-decoration: line-through;
+    color: #888;
+}
+
+/* Buttons Styling */
+.complete-btn,
+.edit-btn,
+.delete-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 5px;
+    transition: color 0.3s ease;
+}
+
+.complete-btn {
+    color: #28a745;
+}
+
+.complete-btn:hover {
+    color: #218838;
+}
+
+.edit-btn {
+    color: #ffc107;
+}
+
+.edit-btn:hover {
+    color: #e0a800;
+}
+
+.delete-btn {
+    color: #dc3545;
+}
+
+.delete-btn:hover {
+    color: #c82333;
+}
+
+
+/* Media Queries for Responsiveness */
+
+/* For tablets and smaller desktops */
+@media (max-width: 768px) {
+    .todo-app {
+        width: 90%; /* Adjusted width for smaller screens */
+        padding: 20px; /* Reduced padding */
+    }
+
+    .todo-app h2 {
+        font-size: 22px; /* Adjusted font size */
+    }
+
+    input {
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    button {
+        padding: 10px 20px; /* Reduced padding */
+        font-size: 14px; /* Adjusted font size */
+    }
+
+    #list li {
+        font-size: 14px; /* Adjusted font size */
+    }
+}
+
+/* For mobile devices */
+@media (max-width: 480px) {
+    .todo-app {
+        width: 95%; /* Adjusted width for mobile screens */
+        padding: 15px; /* Reduced padding */
+    }
+
+    .todo-app h2 {
+        font-size: 20px; /* Adjusted font size */
+    }
+
+    input {
+        font-size: 12px; /* Adjusted font size */
+    }
+
+    button {
+        padding: 8px 16px; /* Reduced padding */
+        font-size: 12px; /* Adjusted font size */
+    }
+
+    #list li {
+        font-size: 12px; /* Adjusted font size */
+    }
+
+    #list li::before {
+        height: 20px; /* Adjusted size */
+        width: 20px; /* Adjusted size */
+    }
+
+    #list li span {
+        width: 25px; /* Adjusted size */
+        height: 25px; /* Adjusted size */
+        font-size: 16px; /* Adjusted font size */
+        line-height: 25px; /* Adjusted line height */
+    }
+
+    .edit-btn, .delete-btn {
+        font-size: 14px;
+    }
+}

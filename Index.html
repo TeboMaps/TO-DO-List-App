@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up / Sign In</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="https://kit.fontawesome.com/408b0a1e7b.js" crossorigin="anonymous"></script>
+    <script type="module" src="/LoginFirebase.js"></script>
+</head>
+<body>
+
+    <div class="container" id="blur">
+        <img src="images/ai1rzjdd.png" alt="">
+        
+      
+
+        <div class="form-box">
+         
+                
+           
+          
+            <h1 id="title"><div class="logo">
+                
+                <img src="images/Brown Abstract Pet Shop Free Logo (1).svg" alt="" >
+               
+                
+            </div>Sign Up</h1>
+            <form id="signUp">
+                
+                <div class="input-group">
+
+                    <div class="input-field" id="namefield">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Name" id="nameID">
+                    </div>
+
+                    <div class="input-field">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" placeholder="Email" id="email">
+                    </div>
+
+                    <div class="input-field">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" placeholder="Password" id="password">
+                    </div>
+                     <br>
+                    <p>Forgot Password <a href="#">Click Here!</a></p>
+
+                </div>
+
+                <div class="btn-field">
+                    <br>
+                <button type="submit" id="SigninBtn" class="disable">Sign In</button>
+                <button type="submit" id="SignupBtn">Sign Up</button>
+            </div>
+           
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let signupBtn = document.getElementById("SignupBtn");
+        let signinBtn = document.getElementById("SigninBtn");
+        let namefield = document.getElementById("namefield");
+        let title = document.getElementById("title");
+
+        signinBtn.onclick = function clicksignIn(){
+           namefield.style.maxHeight="0";
+           title.innerHTML="Sign In";
+           signupBtn.classList.add("disable");
+           signinBtn.classList.remove("disable");
+           
+        }
+
+        signupBtn.onclick = function clickSignUp(){
+           namefield.style.maxHeight="60px";
+           title.innerHTML="Sign Up";
+           signupBtn.classList.remove("disable");
+           signinBtn.classList.add("disable");
+        }
+
+       
+    </script>
+    
+     <script src="/login.js"></script>
+</body>
+</html>

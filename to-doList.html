@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To-List</title>
+    <link rel="stylesheet" href="/to-do.css">
+</head>
+<body>
+    <div class="container">
+        <div class="todo-app">
+            <img src="images/Brown Abstract Pet Shop Free Logo (1).svg" alt="" class="img_class">
+            <h2>Pet Sitter Check List</h2>
+            <hr>
+            <br>
+            <div class="row">
+                <input type="text" id="inputText" placeholder="Add Your Task">
+                <button onclick="addNewData(event)"> + </button>
+            </div>
+            <br>
+            <div>
+                <ul id="list-containers">
+                    <!-- Tasks will be added here dynamically -->
+                </ul>
+            </div>
+        </div>
+        <footer>
+            <!-- Footer content -->
+        </footer>
+    </div>
+    <script src="/script.js"></script>
+</body>
+</html>
