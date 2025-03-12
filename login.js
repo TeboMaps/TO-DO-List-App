@@ -33,8 +33,8 @@ document.getElementById('SigninBtn').addEventListener('click', async (event) => 
     const result = await response.json();
     if (result.token) {
         alert('Login successful');
-        // window.location.href = '/to-doList.html'; 
-        window.location.href = '/views/to-doList.html'
+      window.location.href = '/to-doList.html'; 
+    
     } else {
         alert(result);
     }
