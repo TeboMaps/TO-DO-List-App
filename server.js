@@ -4,7 +4,7 @@ const cors = require('cors');
 
 
 
-const bodyParser = require('body-parser');
+//const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 4000;
@@ -17,7 +17,7 @@ const COLLECTION_NAME = 'tasks'; // Replace with your actual collection name
 
 // Middleware
 app.use(cors());
-app.use(bodyParser.json());
+/*app.use(bodyParser.json());*/
 app.use(express.json());
 
 
