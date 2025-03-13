@@ -2,9 +2,11 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 
+const path = require('path')
 
 
-//const bodyParser = require('body-parser');
+
+const bodyParser = require('body-parser');
 
 const app = express();
 const PORT = 4000;
@@ -17,7 +19,7 @@ const COLLECTION_NAME = 'tasks'; // Replace with your actual collection name
 
 // Middleware
 app.use(cors());
-/*app.use(bodyParser.json());*/
+app.use(bodyParser.json());
 app.use(express.json());
 
 
@@ -42,9 +44,17 @@ const taskSchema = new mongoose.Schema({
 const Task = mongoose.model('Task', taskSchema);
 
 // API Endpoints
+/*app.get('/', (req, res) => {
+    res.send('Welcome to the Todo App API!');
+});*/
 
+//const path = require('path');
 
+app.get('/', (req, res) => {
+    //res.send('Welcome to the Todo App API!');
 
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 // Get all tasks
 app.get('/api/tasks', async (req, res) => {
     try {
