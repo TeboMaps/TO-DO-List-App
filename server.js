@@ -1,11 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-
 const path = require('path')
-
-
-
 const bodyParser = require('body-parser');
 
 const app = express();
@@ -22,6 +18,13 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
+// Serve static files from the "public" directory
+app.use(express.static(path.join(__dirname, 'public')));
+
+// Serve the root URL
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 // Connect to MongoDB
 mongoose.connect(MONGO_URL, {
@@ -43,18 +46,9 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model('Task', taskSchema);
 
-// API Endpoints
-/*app.get('/', (req, res) => {
-    res.send('Welcome to the Todo App API!');
-});*/
 
-//const path = require('path');
 
-app.get('/', (req, res) => {
-    //res.send('Welcome to the Todo App API!');
 
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
 // Get all tasks
 app.get('/api/tasks', async (req, res) => {
     try {
